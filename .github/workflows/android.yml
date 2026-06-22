@@ -39,5 +39,6 @@ jobs:
           pip install buildozer cython
 
       - name: Verificar Buildozer
-  run: |
-    buildozer version
+        run: |
+          which buildozer
+          python -m pip show buildozer
