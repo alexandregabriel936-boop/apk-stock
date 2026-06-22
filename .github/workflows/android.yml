@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-22.04
 
     steps:
@@ -24,7 +24,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Verificar versões
+      - name: Instalar dependências
         run: |
-          python --version
-          java -version
+          sudo apt-get update
+          sudo apt-get install -y \
+          git zip unzip openjdk-17-jdk \
+          python3-pip autoconf libtool pkg-config \
+          zlib1g-dev libncurses5-dev libncursesw5-dev \
+          cmake libffi-dev libssl-dev
+
+      - name: Instalar Buildozer
+        run: |
+          python -m pip install --upgrade pip
+          pip install buildozer cython
+
+      - name: Verificar Buildozer
+        run: |
+          buildozer --version
