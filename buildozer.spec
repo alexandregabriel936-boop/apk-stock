@@ -1,6 +1,7 @@
 [app]
 
 title = StockPro
+
 package.name = stockpro
 package.domain = com.stockpro.mobile
 
@@ -14,6 +15,14 @@ requirements = python3,kivy,kivymd
 orientation = portrait
 
 fullscreen = 0
+
+android.api = 33
+android.minapi = 26
+android.sdk = 33
+android.ndk = 25b
+android.build_tools = 33.0.2
+
+android.archs = arm64-v8a
 
 [buildozer]
 
