@@ -11,5 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Teste
-        run: echo "Workflow funcionando"
+      - uses: actions/checkout@v4
+
+      - name: Listar arquivos
+        run: |
+          ls -la
+          pwd
