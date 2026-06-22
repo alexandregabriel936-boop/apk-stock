@@ -42,3 +42,13 @@ jobs:
         run: |
           which buildozer
           python -m pip show buildozer
+          
+          - name: Gerar APK
+        run: |
+          buildozer android debug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: StockPro-APK
+          path: bin/*.apk
