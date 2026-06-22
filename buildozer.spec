@@ -1,42 +1,45 @@
-[app]
+name: Build APK
 
-# ======================
-# APP BASIC CONFIG
-# ======================
-title = StockPro
-package.name = stockpro
-package.domain = org.stockpro
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
-source.dir = .
-source.include_exts = py,png,jpg,kv,txt,json,html,css,js
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-version = 1.0.0
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-# ======================
-# PYTHON CONFIG
-# ======================
-requirements = python3,kivy,flask,requests
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.10"
 
-orientation = portrait
+    - name: Install system dependencies
+      run: |
+        sudo apt update
+        sudo apt install -y git zip unzip openjdk-17-jdk \
+        autoconf libtool pkg-config \
+        zlib1g-dev libncurses5-dev libncursesw5-dev \
+        libtinfo6 cmake libffi-dev libssl-dev
 
-# ======================
-# ANDROID CONFIG FIX
-# ======================
-android.skip_update = False
-android.api = 31
-android.minapi = 21
-android.build_tools_version = 30.0.3
+    - name: Install Buildozer + dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade buildozer cython setuptools wheel
 
-# ❌ NÃO USAR MAIS (remover se existir):
-# android.sdk = 33
+    # 🔥 FIX PRINCIPAL: força reinstalação limpa TOTAL
+    - name: Clean EVERYTHING
+      run: |
+        rm -rf .buildozer
+        rm -rf ~/.buildozer
 
-# ======================
-# PERMISSIONS
-# ======================
-android.permissions = INTERNET,ACCESS_NETWORK_STATE
-
-# ======================
-# BUILD OPTIMIZATION
-# ======================
-log_level = 2
-warn_on_root = 1
+    # 🔥 FORÇA download correto do python-for-android
+    - name: Build APK (force fresh install)
+      run: |
+        buildozer android clean
+        buildozer android update
+        buildozer -v android debug
