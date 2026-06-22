@@ -1,0 +1,8 @@
+kivy
+kivymd
+openpyxl
+reportlab
+qrcode
+Pillow
+plyer
+matplotlib
